@@ -1,0 +1,541 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище DatabaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ClientSurname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ClientPatronomic" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Passport" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="ObjectCategories">
+          <Key>
+            <PropertyRef Name="ObjCategoryID" />
+          </Key>
+          <Property Name="ObjCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ObjectOtchet">
+          <Key>
+            <PropertyRef Name="ObjOtchStatusID" />
+          </Key>
+          <Property Name="ObjOtchStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ObjectID" Type="int" Nullable="false" />
+          <Property Name="ObjStatusID" Type="int" Nullable="false" />
+          <Property Name="DateOut" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ObjectOtchetPay">
+          <Key>
+            <PropertyRef Name="ObjOtchPayID" />
+          </Key>
+          <Property Name="ObjOtchPayID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="ObjectID" Type="int" Nullable="false" />
+          <Property Name="DateStartRent" Type="datetime" />
+          <Property Name="DateEndRent" Type="datetime" />
+          <Property Name="Summa" Type="money" />
+          <Property Name="Payed" Type="money" />
+        </EntityType>
+        <EntityType Name="Objects">
+          <Key>
+            <PropertyRef Name="ObjectID" />
+          </Key>
+          <Property Name="ObjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ObjectStreet" Type="nvarchar" MaxLength="50" />
+          <Property Name="ObjectHome" Type="nvarchar" MaxLength="50" />
+          <Property Name="ObjectNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="OwnerName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OwnerSurname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OwnerPatronomic" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ObjCategoryID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ObjectStatuses">
+          <Key>
+            <PropertyRef Name="ObjStatusID" />
+          </Key>
+          <Property Name="ObjStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserSurname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserPatronomic" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="UserLogin" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserPassword" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastTimeLogin" Type="datetime" />
+          <Property Name="IsBlocked" Type="bit" />
+        </EntityType>
+        <Association Name="FK_ObjectOtchet_Objects">
+          <End Role="Objects" Type="Self.Objects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchet" Type="Self.ObjectOtchet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objects">
+              <PropertyRef Name="ObjectID" />
+            </Principal>
+            <Dependent Role="ObjectOtchet">
+              <PropertyRef Name="ObjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ObjectOtchet_ObjectStatuses">
+          <End Role="ObjectStatuses" Type="Self.ObjectStatuses" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchet" Type="Self.ObjectOtchet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectStatuses">
+              <PropertyRef Name="ObjStatusID" />
+            </Principal>
+            <Dependent Role="ObjectOtchet">
+              <PropertyRef Name="ObjStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ObjectOtchetPay_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchetPay" Type="Self.ObjectOtchetPay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="ObjectOtchetPay">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ObjectOtchetPay_Objects">
+          <End Role="Objects" Type="Self.Objects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchetPay" Type="Self.ObjectOtchetPay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objects">
+              <PropertyRef Name="ObjectID" />
+            </Principal>
+            <Dependent Role="ObjectOtchetPay">
+              <PropertyRef Name="ObjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Objects_ObjectCategories1">
+          <End Role="ObjectCategories" Type="Self.ObjectCategories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Objects" Type="Self.Objects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectCategories">
+              <PropertyRef Name="ObjCategoryID" />
+            </Principal>
+            <Dependent Role="Objects">
+              <PropertyRef Name="ObjCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище DatabaseModelContainer">
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ObjectCategories" EntityType="Self.ObjectCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ObjectOtchet" EntityType="Self.ObjectOtchet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ObjectOtchetPay" EntityType="Self.ObjectOtchetPay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Objects" EntityType="Self.Objects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ObjectStatuses" EntityType="Self.ObjectStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ObjectOtchet_Objects" Association="Self.FK_ObjectOtchet_Objects">
+            <End Role="Objects" EntitySet="Objects" />
+            <End Role="ObjectOtchet" EntitySet="ObjectOtchet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ObjectOtchet_ObjectStatuses" Association="Self.FK_ObjectOtchet_ObjectStatuses">
+            <End Role="ObjectStatuses" EntitySet="ObjectStatuses" />
+            <End Role="ObjectOtchet" EntitySet="ObjectOtchet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ObjectOtchetPay_Clients" Association="Self.FK_ObjectOtchetPay_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ObjectOtchetPay" EntitySet="ObjectOtchetPay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ObjectOtchetPay_Objects" Association="Self.FK_ObjectOtchetPay_Objects">
+            <End Role="Objects" EntitySet="Objects" />
+            <End Role="ObjectOtchetPay" EntitySet="ObjectOtchetPay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Objects_ObjectCategories1" Association="Self.FK_Objects_ObjectCategories1">
+            <End Role="ObjectCategories" EntitySet="ObjectCategories" />
+            <End Role="Objects" EntitySet="Objects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClientSurname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClientPatronomic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Passport" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ObjectOtchetPay" Relationship="Self.FK_ObjectOtchetPay_Clients" FromRole="Clients" ToRole="ObjectOtchetPay" />
+        </EntityType>
+        <EntityType Name="ObjectCategories">
+          <Key>
+            <PropertyRef Name="ObjCategoryID" />
+          </Key>
+          <Property Name="ObjCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Objects" Relationship="Self.FK_Objects_ObjectCategories1" FromRole="ObjectCategories" ToRole="Objects" />
+        </EntityType>
+        <EntityType Name="ObjectOtchet">
+          <Key>
+            <PropertyRef Name="ObjOtchStatusID" />
+          </Key>
+          <Property Name="ObjOtchStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ObjectID" Type="Int32" Nullable="false" />
+          <Property Name="ObjStatusID" Type="Int32" Nullable="false" />
+          <Property Name="DateOut" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Objects" Relationship="Self.FK_ObjectOtchet_Objects" FromRole="ObjectOtchet" ToRole="Objects" />
+          <NavigationProperty Name="ObjectStatuses" Relationship="Self.FK_ObjectOtchet_ObjectStatuses" FromRole="ObjectOtchet" ToRole="ObjectStatuses" />
+        </EntityType>
+        <EntityType Name="ObjectOtchetPay">
+          <Key>
+            <PropertyRef Name="ObjOtchPayID" />
+          </Key>
+          <Property Name="ObjOtchPayID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="ObjectID" Type="Int32" Nullable="false" />
+          <Property Name="DateStartRent" Type="DateTime" Precision="3" />
+          <Property Name="DateEndRent" Type="DateTime" Precision="3" />
+          <Property Name="Summa" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Payed" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK_ObjectOtchetPay_Clients" FromRole="ObjectOtchetPay" ToRole="Clients" />
+          <NavigationProperty Name="Objects" Relationship="Self.FK_ObjectOtchetPay_Objects" FromRole="ObjectOtchetPay" ToRole="Objects" />
+        </EntityType>
+        <EntityType Name="Objects">
+          <Key>
+            <PropertyRef Name="ObjectID" />
+          </Key>
+          <Property Name="ObjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ObjectStreet" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ObjectHome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ObjectNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OwnerSurname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OwnerPatronomic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ObjCategoryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ObjectCategories" Relationship="Self.FK_Objects_ObjectCategories1" FromRole="Objects" ToRole="ObjectCategories" />
+          <NavigationProperty Name="ObjectOtchet" Relationship="Self.FK_ObjectOtchet_Objects" FromRole="Objects" ToRole="ObjectOtchet" />
+          <NavigationProperty Name="ObjectOtchetPay" Relationship="Self.FK_ObjectOtchetPay_Objects" FromRole="Objects" ToRole="ObjectOtchetPay" />
+        </EntityType>
+        <EntityType Name="ObjectStatuses">
+          <Key>
+            <PropertyRef Name="ObjStatusID" />
+          </Key>
+          <Property Name="ObjStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ObjectOtchet" Relationship="Self.FK_ObjectOtchet_ObjectStatuses" FromRole="ObjectStatuses" ToRole="ObjectOtchet" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Roles" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserSurname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserPatronomic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="UserLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastTimeLogin" Type="DateTime" Precision="3" />
+          <Property Name="IsBlocked" Type="Boolean" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Users_Roles" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK_ObjectOtchetPay_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchetPay" Type="Self.ObjectOtchetPay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="ObjectOtchetPay">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Objects_ObjectCategories1">
+          <End Role="ObjectCategories" Type="Self.ObjectCategories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Objects" Type="Self.Objects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectCategories">
+              <PropertyRef Name="ObjCategoryID" />
+            </Principal>
+            <Dependent Role="Objects">
+              <PropertyRef Name="ObjCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ObjectOtchet_Objects">
+          <End Role="Objects" Type="Self.Objects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchet" Type="Self.ObjectOtchet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objects">
+              <PropertyRef Name="ObjectID" />
+            </Principal>
+            <Dependent Role="ObjectOtchet">
+              <PropertyRef Name="ObjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ObjectOtchet_ObjectStatuses">
+          <End Role="ObjectStatuses" Type="Self.ObjectStatuses" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchet" Type="Self.ObjectOtchet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectStatuses">
+              <PropertyRef Name="ObjStatusID" />
+            </Principal>
+            <Dependent Role="ObjectOtchet">
+              <PropertyRef Name="ObjStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ObjectOtchetPay_Objects">
+          <End Role="Objects" Type="Self.Objects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ObjectOtchetPay" Type="Self.ObjectOtchetPay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objects">
+              <PropertyRef Name="ObjectID" />
+            </Principal>
+            <Dependent Role="ObjectOtchetPay">
+              <PropertyRef Name="ObjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Clients" />
+          <EntitySet Name="ObjectCategories" EntityType="Self.ObjectCategories" />
+          <EntitySet Name="ObjectOtchet" EntityType="Self.ObjectOtchet" />
+          <EntitySet Name="ObjectOtchetPay" EntityType="Self.ObjectOtchetPay" />
+          <EntitySet Name="Objects" EntityType="Self.Objects" />
+          <EntitySet Name="ObjectStatuses" EntityType="Self.ObjectStatuses" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_ObjectOtchetPay_Clients" Association="Self.FK_ObjectOtchetPay_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ObjectOtchetPay" EntitySet="ObjectOtchetPay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Objects_ObjectCategories1" Association="Self.FK_Objects_ObjectCategories1">
+            <End Role="ObjectCategories" EntitySet="ObjectCategories" />
+            <End Role="Objects" EntitySet="Objects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ObjectOtchet_Objects" Association="Self.FK_ObjectOtchet_Objects">
+            <End Role="Objects" EntitySet="Objects" />
+            <End Role="ObjectOtchet" EntitySet="ObjectOtchet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ObjectOtchet_ObjectStatuses" Association="Self.FK_ObjectOtchet_ObjectStatuses">
+            <End Role="ObjectStatuses" EntitySet="ObjectStatuses" />
+            <End Role="ObjectOtchet" EntitySet="ObjectOtchet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ObjectOtchetPay_Objects" Association="Self.FK_ObjectOtchetPay_Objects">
+            <End Role="Objects" EntitySet="Objects" />
+            <End Role="ObjectOtchetPay" EntitySet="ObjectOtchetPay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище DatabaseModelContainer" CdmEntityContainer="DatabaseEntities">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="DatabaseModel.Clients">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientSurname" ColumnName="ClientSurname" />
+                <ScalarProperty Name="ClientPatronomic" ColumnName="ClientPatronomic" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Passport" ColumnName="Passport" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ObjectCategories">
+            <EntityTypeMapping TypeName="DatabaseModel.ObjectCategories">
+              <MappingFragment StoreEntitySet="ObjectCategories">
+                <ScalarProperty Name="ObjCategoryID" ColumnName="ObjCategoryID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ObjectOtchet">
+            <EntityTypeMapping TypeName="DatabaseModel.ObjectOtchet">
+              <MappingFragment StoreEntitySet="ObjectOtchet">
+                <ScalarProperty Name="ObjOtchStatusID" ColumnName="ObjOtchStatusID" />
+                <ScalarProperty Name="ObjectID" ColumnName="ObjectID" />
+                <ScalarProperty Name="ObjStatusID" ColumnName="ObjStatusID" />
+                <ScalarProperty Name="DateOut" ColumnName="DateOut" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ObjectOtchetPay">
+            <EntityTypeMapping TypeName="DatabaseModel.ObjectOtchetPay">
+              <MappingFragment StoreEntitySet="ObjectOtchetPay">
+                <ScalarProperty Name="ObjOtchPayID" ColumnName="ObjOtchPayID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ObjectID" ColumnName="ObjectID" />
+                <ScalarProperty Name="DateStartRent" ColumnName="DateStartRent" />
+                <ScalarProperty Name="DateEndRent" ColumnName="DateEndRent" />
+                <ScalarProperty Name="Summa" ColumnName="Summa" />
+                <ScalarProperty Name="Payed" ColumnName="Payed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Objects">
+            <EntityTypeMapping TypeName="DatabaseModel.Objects">
+              <MappingFragment StoreEntitySet="Objects">
+                <ScalarProperty Name="ObjectID" ColumnName="ObjectID" />
+                <ScalarProperty Name="ObjectStreet" ColumnName="ObjectStreet" />
+                <ScalarProperty Name="ObjectHome" ColumnName="ObjectHome" />
+                <ScalarProperty Name="ObjectNumber" ColumnName="ObjectNumber" />
+                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+                <ScalarProperty Name="OwnerSurname" ColumnName="OwnerSurname" />
+                <ScalarProperty Name="OwnerPatronomic" ColumnName="OwnerPatronomic" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ObjCategoryID" ColumnName="ObjCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ObjectStatuses">
+            <EntityTypeMapping TypeName="DatabaseModel.ObjectStatuses">
+              <MappingFragment StoreEntitySet="ObjectStatuses">
+                <ScalarProperty Name="ObjStatusID" ColumnName="ObjStatusID" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DatabaseModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="DatabaseModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserSurname" ColumnName="UserSurname" />
+                <ScalarProperty Name="UserPatronomic" ColumnName="UserPatronomic" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="UserLogin" ColumnName="UserLogin" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="LastTimeLogin" ColumnName="LastTimeLogin" />
+                <ScalarProperty Name="IsBlocked" ColumnName="IsBlocked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

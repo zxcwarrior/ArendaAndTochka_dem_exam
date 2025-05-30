@@ -1,0 +1,17 @@
+﻿<Application x:Class="ArendaAndTochka_dem_exam.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ArendaAndTochka_dem_exam"
+             StartupUri="Windows/DesktopWindow.xaml">
+    <Application.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Bahnschrift"/>
+            <Setter Property="FontSize" Value="22"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Bahnschrift"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background" Value="LightBlue"/>
+        </Style>
+    </Application.Resources>
+</Application>
